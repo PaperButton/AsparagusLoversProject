@@ -1,0 +1,42 @@
+﻿@model AsparagusLoversProject.ViewModels.GetLoverDataForEatingViewModel
+@{
+   
+}
+
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+
+
+<center>
+<form method="post" asp-controller="Home" asp-action="SaveEatingAsparagus">
+
+<div class="form-floating col-3">
+  <input class="form-control" type="text" id="LoverFname" data-val="true" data-val-required="Please input Fname." name="LoverFname" required="" placeholder="LoverFname">
+    <label for="LoverFname">Имя</label>
+  <span class="text-danger field-validation-valid" data-valmsg-for="LoverFname" data-valmsg-replace="true"></span>
+</div>
+
+</br>
+
+<div class="form-floating col-3">
+  <input class="form-control" type="EMail" id="LoverEMail" data-val="true" data-val-LoverEMail="Please enter a valid EMail address." data-val-required="Please input EMail." name="LoverEMail" required="" placeholder="LoverEMail">
+    <label for="LoverEMail">EMail</label>
+  <span class="text-danger field-validation-valid" data-valmsg-for="LoverEMail" data-valmsg-replace="true"></span>
+</div>
+
+</br>
+
+<div class="d-grid gap-2 col-2">
+  <button class="btn btn-primary" type="submit">Я съел спаржу!</button>
+</div>
+
+</form>
+</center>
+
+
+
+
