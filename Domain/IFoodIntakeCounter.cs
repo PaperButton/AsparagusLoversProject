@@ -15,7 +15,7 @@ namespace AsparagusLoversProject.Domain
         /// </summary>
         public Guid LoverID { get; set; }
         /// <summary>
-        /// User's number of meals taken
+        /// User's number of meals taken 
         /// </summary>
         public int NumberOfMealsOfFood { get; set; }
 
