@@ -7,72 +7,14 @@ using AsparagusLoversProject.ViewModels;
 namespace AsparagusLoversProject.Domain
 {
     public class AsparagusLoverRepository<TLover> : ILoverRepository<TLover>
-    where TLover: ILover//ILoverRepository<AsparagusLover> 
+    where TLover: ILover
     {
         private readonly AppDbContext context;
         public AsparagusLoverRepository(AppDbContext context)
         {
             this.context = context;
         }
-        /*public IQueryable<AsparagusLover> GetAsparagusLovers()
-        {
-            
-        }
-        public AsparagusLover GetAsparagusLoverById(Guid id)
-        {
-            
-        }
-        public Guid SaveAsparagusLover(AsparagusLover entity)
-        {
-            
-        }
-        public void DeleteAsparagusLover(AsparagusLover entity)
-        {
-            
-        }*/
-
-
-
-        /*--------
-
-        public IQueryable<AsparagusLover> GetLovers()
-        {
-            return context.Lovers.OrderByDescending(x => x.Fname);
-        }
-
-        public AsparagusLover GetLoverById(Guid id)
-        {
-            return context.Lovers.Single(x => x.LoverID == id);
-        }
-
-        public Guid SaveLover(GetLoverDataForEatingViewModel entity)
-        {
-            ILover lover = new AsparagusLover { Fname = entity.LoverFname, EMail = entity.LoverEMail};
-            if (context.Lovers.Where(x => x.EMail == entity.LoverEMail).ToList().Count == 0)
-            {
-                // if (entity.LoverID == Guid.Empty)
-                // entity.LoverID = Guid.NewGuid();
-                lover.LoverID = Guid.NewGuid();
-                context.Entry(lover).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                context.SaveChanges();
-            }
-            else
-            {
-                lover.LoverID = context.Lovers.Single(x => x.EMail == entity.LoverEMail).LoverID;
-            }
-                
-            return lover.LoverID;
-        }
-
-        public void DeleteLover(AsparagusLover entity)
-        {
-            context.Lovers.Remove(entity);
-            context.SaveChanges();
-        }
-        */
-
-
-
+       
       
         public IQueryable<TLover> GetLovers()
         {

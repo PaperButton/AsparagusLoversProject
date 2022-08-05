@@ -11,7 +11,7 @@ namespace AsparagusLoversProject.Controllers
 {
     public class HomeController : Controller
     {
-        // private readonly ILoverRepository<AsparagusLover> _loversRepository;
+   
         private readonly AsparagusLoverRepository<ILover> _loversRepository;
         private readonly IFoodIntakeCounterRepository<IFoodIntakeCounter,ILover> _foodIntakeCounterRepository;
 
@@ -33,6 +33,12 @@ namespace AsparagusLoversProject.Controllers
             return RedirectToAction("RegisterVK", "Account");
         }
 
+            // ViewData["AsparagusLovers"] = _asparagusLoversRepository.GetAsparagusLovers();
+            var model = _asparagusLoversRepository.GetAsparagusLovers();
+
+            return View(model);
+        }*/
+
         public IActionResult SaveEatingAsparagus()
         {
             GetLoverDataForEatingViewModel inputLoverData = new GetLoverDataForEatingViewModel();
@@ -42,7 +48,7 @@ namespace AsparagusLoversProject.Controllers
 
         [PrepareNewLoverForValidating]
         [HttpPost]
-        public IActionResult SaveEatingAsparagus(GetLoverDataForEatingViewModel inputLoverData)//(AsparagusLover model)
+        public IActionResult SaveEatingAsparagus(GetLoverDataForEatingViewModel inputLoverData)
         {
             if (!ModelState.IsValid)
             {
