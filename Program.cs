@@ -13,6 +13,9 @@ using AsparagusLoversProject.Repositories;
 using Xunit;
 using AsparagusLoversProject.Filters;
 using System.Configuration;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.OAuth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,16 +29,80 @@ builder.Services.AddScoped<IFoodIntakeCounterRepository<IFoodIntakeCounter,ILove
 
 builder.Services.AddScoped<PrepareNewLoverForValidatingAttribute>();
 
+builder.Services.AddScoped<ApplicationUser>();
+builder.Services.AddScoped<UserManager<ApplicationUser>>();
+builder.Services.AddScoped<SignInManager<ApplicationUser>>();
+
 IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json")
             .Build();
 
-builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
+                                            .AddIdentity<ApplicationUser, ApplicationRole>(config =>
+                                            {
+                                                config.Password.RequireDigit = false;
+                                                config.Password.RequireLowercase = false;
+                                                config.Password.RequireNonAlphanumeric = false;
+                                                config.Password.RequireUppercase = false;
+                                                config.Password.RequiredLength = 6;
+                                            })
+                .AddEntityFrameworkStores<AppDbContext>();
 
 
 builder.Services.AddSession();
 builder.Services.AddMvc();
+
+
+builder.Services.AddAuthentication()
+    .AddOAuth("VK", "VKontakte", config =>
+    {
+        config.ClientId = configuration["Authentication:VK:AppId"];
+        config.ClientSecret = configuration["Authentication:VK:AppSecret"];
+        config.ClaimsIssuer = "VKontakte";
+        config.CallbackPath = new PathString("/signin-vkontakte-token");
+        config.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
+        config.TokenEndpoint = "https://oauth.vk.com/access_token";
+        config.Scope.Add("email");
+        config.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
+        config.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+        config.SaveTokens = true;
+        config.Events = new OAuthEvents
+        {
+            OnCreatingTicket = context =>
+            {
+                context.RunClaimActions(context.TokenResponse.Response.RootElement);
+                return Task.CompletedTask;
+            },
+            OnRemoteFailure = context =>
+            {
+                Console.WriteLine(context.Failure);
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+
+builder.Services.ConfigureApplicationCookie(config =>
+{
+    config.LoginPath = "/Admin/Login";
+    config.AccessDeniedPath = "/Home/AccessDenied";
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Administrator", builder =>
+    {
+        builder.RequireClaim(ClaimTypes.Role, "Administrator");
+    });
+
+    options.AddPolicy("Manager", builder =>
+    {
+        builder.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, "Manager")
+                                      || x.User.HasClaim(ClaimTypes.Role, "Administrator"));
+    });
+
+});
 
 var app = builder.Build();
 
@@ -52,6 +119,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+ 
 app.UseAuthorization();
 
 app.MapControllerRoute(

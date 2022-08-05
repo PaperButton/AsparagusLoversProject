@@ -5,12 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AsparagusLoversProject.Migrations
 {
-    public partial class initial2 : Migration
+    public partial class AddExternalAuthentication : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            
-
            
         }
 

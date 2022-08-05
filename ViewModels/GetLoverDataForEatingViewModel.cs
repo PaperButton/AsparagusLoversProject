@@ -15,5 +15,9 @@ namespace AsparagusLoversProject.ViewModels
         /// </summary>
         [Required]
         public string LoverEMail { get; set; } = string.Empty;
+
+        [Required]
+        public int ProviderId { get; set; }
+        public string ExternalId { get; set; } = string.Empty;
     }
 }
