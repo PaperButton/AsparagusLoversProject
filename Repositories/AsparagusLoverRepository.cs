@@ -85,8 +85,14 @@ namespace AsparagusLoversProject.Domain
         }
         public Guid SaveLover(GetLoverDataForEatingViewModel inputLoverData)
         {
-            ILover lover = new AsparagusLover { Fname = inputLoverData.LoverFname, EMail = inputLoverData.LoverEMail };
-            if (context.Lovers.Where(x => x.EMail == inputLoverData.LoverEMail).ToList().Count == 0)
+            ILover lover = new AsparagusLover { Fname = inputLoverData.LoverFname, EMail = inputLoverData.LoverEMail, 
+                                                AuthenticationProviderrr = new AuthenticationProviderrr() 
+                                                    {AuthenticationProviderrrID = inputLoverData.ProviderId },
+                                                ExternalId= inputLoverData.ExternalId };
+
+            if (context.Lovers.Where(x => (x.EMail == inputLoverData.LoverEMail && string.IsNullOrEmpty(x.EMail) == false) || 
+                                    (x.AuthenticationProviderrr.AuthenticationProviderrrID == inputLoverData.ProviderId && x.ExternalId == inputLoverData.ExternalId))
+                                    .ToList().Count == 0)
             {
                 lover.LoverID = Guid.NewGuid();
                 context.Entry(lover).State = Microsoft.EntityFrameworkCore.EntityState.Added;
@@ -94,9 +100,12 @@ namespace AsparagusLoversProject.Domain
             }
             else
             {
-                lover.LoverID = context.Lovers.Single(x => x.EMail == inputLoverData.LoverEMail).LoverID;
+                lover.LoverID = context.Lovers.Single(x => (x.EMail == inputLoverData.LoverEMail && 
+                                                        string.IsNullOrEmpty(x.EMail) == false) ||
+                                                        (x.AuthenticationProviderrr.AuthenticationProviderrrID == inputLoverData.ProviderId 
+                                                        && x.ExternalId == inputLoverData.ExternalId)).LoverID;
             }
-
+           
             return lover.LoverID;
         }
 

@@ -10,16 +10,11 @@ using AsparagusLoversProject.Models;
 
 namespace AsparagusLoversProject.Domain
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>  
+    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         public DbSet<AsparagusLover> Lovers { get; set; }
         public DbSet<FoodIntakeCounter> FoodIntakeCounters { get; set; }
-
-        /*public DbSet<AsparagusLover> Lovers { get; set; }
-        public DbSet<FoodIntakeCounter> FoodIntakeCounters { get; set; }*/
-
-        /*public virtual DbSet<FoodIntakeCounter> FoodIntakeCounters { get; set; } = null!;
-        public virtual DbSet<Lover> Lovers { get; set; } = null!;*/
+        public DbSet<AuthenticationProviderrr> AuthenticationProviderrrs { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -39,7 +34,16 @@ namespace AsparagusLoversProject.Domain
                 .HasOne(f => (AsparagusLover)f.Lover)
                 .WithOne(l => (FoodIntakeCounter)l.FoodIntakeCounter)
                 .HasForeignKey<FoodIntakeCounter>(w => w.LoverID);
-            
+
+
+
+            /*builder.Entity<AuthenticationProviderrr>()
+                 .HasMany(f => (IList<AsparagusLover>)f.Lover)
+                 .WithOne();
+           */
+            builder.Entity<AsparagusLover>()
+                 .HasOne(o => (AuthenticationProviderrr)o.AuthenticationProviderrr)
+                 .WithMany();
 
             base.OnModelCreating(builder);
 

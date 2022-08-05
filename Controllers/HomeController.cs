@@ -5,6 +5,7 @@ using AsparagusLoversProject.Domain;
 using AsparagusLoversProject.Repositories;
 using AsparagusLoversProject.Filters;
 using AsparagusLoversProject.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AsparagusLoversProject.Controllers
 {
@@ -25,22 +26,17 @@ namespace AsparagusLoversProject.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        
+
+        public IActionResult SetNewUserVK()
         {
-            return View();
+            return RedirectToAction("RegisterVK", "Account");
         }
-
-        /*public IActionResult NewsFeed()
-        {
-            // ViewData["AsparagusLovers"] = _asparagusLoversRepository.GetAsparagusLovers();
-            var model = _asparagusLoversRepository.GetAsparagusLovers();
-
-            return View(model);
-        }*/
 
         public IActionResult SaveEatingAsparagus()
         {
             GetLoverDataForEatingViewModel inputLoverData = new GetLoverDataForEatingViewModel();
+            inputLoverData.ProviderId = 1;
             return View(inputLoverData);
         }
 
