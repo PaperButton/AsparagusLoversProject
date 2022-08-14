@@ -33,11 +33,7 @@ namespace AsparagusLoversProject.Controllers
             return RedirectToAction("RegisterVK", "Account");
         }
 
-            // ViewData["AsparagusLovers"] = _asparagusLoversRepository.GetAsparagusLovers();
-            var model = _asparagusLoversRepository.GetAsparagusLovers();
-
-            return View(model);
-        }*/
+  
 
         public IActionResult SaveEatingAsparagus()
         {
